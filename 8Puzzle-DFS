@@ -1,0 +1,49 @@
+def neighbors(state):
+    zero = state.index(0)
+    r, c = divmod(zero, 3)
+
+    for dr, dc in [(-1,0), (1,0), (0,-1), (0,1)]:
+        nr, nc = r + dr, c + dc
+
+        if 0 <= nr < 3 and 0 <= nc < 3:
+            new_zero = nr * 3 + nc
+            s = list(state)
+            s[zero], s[new_zero] = s[new_zero], s[zero]
+            yield tuple(s)
+
+
+# ---------- DFS ----------
+def dfs(start, goal):
+    stack = [(start, 0)]
+    visited = set()
+
+    while stack:
+        state, moves = stack.pop()
+
+        if state == goal:
+            return moves
+
+        if state in visited:
+            continue
+
+        visited.add(state)
+
+        for nxt in neighbors(state):
+            if nxt not in visited:
+                stack.append((nxt, moves + 1))
+
+    return -1
+
+# ---------- Input ----------
+start = (1, 2, 3,
+         4, 0, 6,
+         7, 5, 8)
+
+goal = (1, 2, 3,
+        6, 4, 5,
+        7, 8, 0)
+
+# ---------- Output ----------
+print("DFS:")
+print("Goal:", goal)
+print("Total moves:", dfs(start, goal))
