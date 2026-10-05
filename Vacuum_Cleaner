@@ -1,0 +1,36 @@
+def reflex_agent(location, status):
+    """Decides the action for the vacuum cleaner based on location and status."""
+    if status == "Dirty":
+        return "Suck"
+    elif location == "A":
+        return "Right"
+    elif location == "B":
+        return "Left"
+
+def run_vacuum_world():
+    """Simulates the vacuum cleaner agent in Room A and Room B."""
+    environment = {
+        'A': input("Enter status for Room A (Dirty/Clean): ").strip(),
+        'B': input("Enter status for Room B (Dirty/Clean): ").strip()
+    }
+    
+    location = input("Enter initial location of vacuum (A/B): ").strip().upper()
+    
+    print(f"\nInitial Environment: {environment}")
+    print(f"Vacuum starts at Room {location}")
+    
+    for step in range(2):
+        status = environment[location]
+        action = reflex_agent(location, status)
+        print(f"Step {step + 1}: At Room {location}, Status is {status} -> Action: {action}")
+        
+        if action == "Suck":
+            environment[location] = "Clean"
+        elif action == "Right":
+            location = "B"
+        elif action == "Left":
+            location = "A"
+            
+    print(f"\nFinal Environment: {environment}")
+
+run_vacuum_world()
