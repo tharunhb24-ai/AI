@@ -1,0 +1,54 @@
+def neighbors(state):
+    zero = state.index(0)
+    r, c = divmod(zero, 3)
+
+    for dr, dc in [(-1,0), (1,0), (0,-1), (0,1)]:
+        nr, nc = r + dr, c + dc
+
+        if 0 <= nr < 3 and 0 <= nc < 3:
+            new_zero = nr * 3 + nc
+            s = list(state)
+            s[zero], s[new_zero] = s[new_zero], s[zero]
+            yield tuple(s)
+
+# ---------- IDS ----------
+def dls(state, goal, depth, path):
+    if state == goal:
+        return 0
+
+    if depth == 0:
+        return -1
+
+    for nxt in neighbors(state):
+        if nxt not in path:
+            result = dls(nxt, goal, depth - 1, path | {nxt})
+
+            if result != -1:
+                return result + 1
+
+    return -1
+
+
+def ids(start, goal):
+    for depth in range(50):
+        result = dls(start, goal, depth, {start})
+
+        if result != -1:
+            return result
+
+    return -1
+
+
+# ---------- Input ----------
+start = (1, 2, 3,
+         4, 0, 6,
+         7, 5, 8)
+
+goal = (1, 2, 3,
+        6, 4, 5,
+        7, 8, 0)
+
+# ---------- Output ----------
+print("\nIDS:")
+print("Goal:", goal)
+print("Total moves:", ids(start, goal))
